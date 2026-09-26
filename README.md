@@ -1,70 +1,237 @@
-# Getting Started with Create React App
+# Assignment 11 - Docker File
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Student Information
 
-## Available Scripts
+**Name:** Oluwadamilola Akintokun  
+**Assignment:** Coding Assignment 11 - Docker File
 
-In the project directory, you can run:
+## Project Overview
 
-### `npm start`
+This project demonstrates how to create and run a React development environment using Docker. The web application was created using Create React App and displays an `<h1>` heading with the text **"Codin 1"**.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The application runs inside a Docker container and can be accessed in the browser at:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+`http://localhost:7775`
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Requirements
 
-### `npm run build`
+The following software was used to complete this project:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js
+- npm and npx
+- Create React App
+- Docker Desktop
+- Visual Studio Code
+- Web browser
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Step 1: Create the React Application
 
-### `npm run eject`
+I first navigated to my Documents folder and created a new React application using Create React App.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```powershell
+cd $HOME\Documents
+npx create-react-app assignment11
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+After Create React App finished creating the project, I navigated into the project folder:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```powershell
+cd assignment11
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+I then opened the project in Visual Studio Code:
 
-## Learn More
+```powershell
+code .
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Step 2: Modify the React Application
 
-### Code Splitting
+I opened the `src/App.js` file and modified the App component so that the application displays the required `<h1>` heading.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```javascript
+// Imports the CSS file used to style the App component
+import './App.css';
 
-### Analyzing the Bundle Size
+// Creates the main App component for the React application
+function App() {
+  return (
+    // Main container for the application
+    <div className="App">
+      {/* Displays the required heading for Assignment 11 */}
+      <h1>Codin 1</h1>
+    </div>
+  );
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+// Exports the App component so it can be used by the application
+export default App;
+```
 
-### Making a Progressive Web App
+I tested the React application locally using:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```powershell
+npm start
+```
 
-### Advanced Configuration
+The application successfully displayed **Codin 1** in the browser.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## Step 3: Create the Dockerfile
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+I created a file named `Dockerfile` in the root directory of the project.
 
-### `npm run build` fails to minify
+The Dockerfile contains:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```dockerfile
+# Use Node.js version 24 as the base image for the application
+FROM node:24
+
+# Set the required working directory inside the Docker container
+WORKDIR /Akintokun_Oluwadamilola_site
+
+# Copy package.json and package-lock.json into the working directory
+COPY package*.json ./
+
+# Install all dependencies required by the React application
+RUN npm install
+
+# Copy the remaining project files into the container
+COPY . .
+
+# Expose port 3000, which is used by the React development server
+EXPOSE 3000
+
+# Start the React application when the container runs
+CMD ["npm", "start"]
+```
+
+### Dockerfile Explanation
+
+- `FROM node:24` uses Node.js version 24 as the base image.
+- `WORKDIR /Akintokun_Oluwadamilola_site` sets the working directory inside the container.
+- `COPY package*.json ./` copies the package files into the container.
+- `RUN npm install` installs the project dependencies.
+- `COPY . .` copies the remaining project files into the container.
+- `EXPOSE 3000` identifies port 3000 as the port used by the React development server.
+- `CMD ["npm", "start"]` starts the React application when the container runs.
+
+---
+
+## Step 4: Build the Docker Image
+
+With Docker Desktop running, I built the Docker image using:
+
+```powershell
+docker build -t coding-assignment11 .
+```
+
+The `-t` option gives the Docker image the name `coding-assignment11`.
+
+The period (`.`) tells Docker to use the current project directory as the build context.
+
+---
+
+## Step 5: Create and Run the Docker Container
+
+I created and started the Docker container using:
+
+```powershell
+docker run --name Akintokun_Oluwadamilola_coding_assignment11 -p 7775:3000 coding-assignment11
+```
+
+The container is named:
+
+`Akintokun_Oluwadamilola_coding_assignment11`
+
+The `-p 7775:3000` option maps port **7775** on the host computer to port **3000** inside the Docker container.
+
+---
+
+## Step 6: Access the Application
+
+After the container started and the React application compiled successfully, I opened the following address in my browser:
+
+`http://localhost:7775`
+
+The application successfully displayed:
+
+```html
+<h1>Codin 1</h1>
+```
+
+---
+
+## Step 7: Verify the Docker Container
+
+I verified that the container was running using:
+
+```powershell
+docker ps
+```
+
+The command showed the container named:
+
+`Akintokun_Oluwadamilola_coding_assignment11`
+
+It also showed that host port `7775` was mapped to container port `3000`.
+
+---
+
+## Step 8: Verify the Working Directory
+
+I verified the working directory inside the running container using:
+
+```powershell
+docker exec Akintokun_Oluwadamilola_coding_assignment11 pwd
+```
+
+The command returned:
+
+```text
+/Akintokun_Oluwadamilola_site
+```
+
+This confirms that the application files are hosted in the required working directory.
+
+---
+
+## Running the Project Again
+
+If the container already exists but is stopped, it can be started using:
+
+```powershell
+docker start Akintokun_Oluwadamilola_coding_assignment11
+```
+
+The application can then be accessed at:
+
+`http://localhost:7775`
+
+To stop the container:
+
+```powershell
+docker stop Akintokun_Oluwadamilola_coding_assignment11
+```
+
+---
+
+## Assignment Requirements Completed
+
+This project meets the Assignment 11 requirements by:
+
+- Creating the application using Create React App.
+- Displaying an `<h1>` element containing **"Codin 1"**.
+- Creating a Docker development environment.
+- Using `/Akintokun_Oluwadamilola_site` as the Docker working directory.
+- Creating a container named `Akintokun_Oluwadamilola_coding_assignment11`.
+- Mapping host port `7775` to the React application's container port `3000`.
+- Running the application successfully at `localhost:7775`.
+- Providing step-by-step documentation for creating, configuring, and running the project.
